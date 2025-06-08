@@ -570,7 +570,7 @@ class UPat(MathTrait):
     self.op: Optional[tuple[Ops, ...]] = (op,) if isinstance(op, Ops) else (tuple(op) if isinstance(op, set) else op)
     self.dtype: Optional[tuple[DType, ...]] = (dtype,) if isinstance(dtype, DType) else dtype
     self.arg, self.name, self._in_src, self.custom_early_reject = arg, name, src, custom_early_reject
-    self.src: Any = None
+    self.src: Any | None = None
     assert self.name != "ctx", "UPat can't be named ctx"
     assert dtype is None or isinstance(dtype, DType) or all(isinstance(x, DType) for x in dtype), f"invalid dtype {dtype}"
 
@@ -587,7 +587,7 @@ class UPat(MathTrait):
 
     if custom_early_reject is not None: self.early_reject = custom_early_reject
     else:
-      upat_match = [src] if isinstance(src, UPat) else ([] if src is None else self.src[0])
+      upat_match = [src] if isinstance(src, UPat) else ([] if src is None else src[0])
       self.early_reject = {pp.op[0] for pp in upat_match if pp.op is not None and len(pp.op) == 1}
 
   def __reduce__(self):
