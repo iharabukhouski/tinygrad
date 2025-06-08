@@ -674,12 +674,10 @@ def upat_interpret(p:UPat, fxn:Callable) -> Callable:
     def universal_match(uop, ctx):
       for match in p.match(uop, {}):
         if (ret:=real_fxn(ctx=ctx, **match)) is not None: return ret  # pylint: disable=not-callable
-      return None
   else:
     def universal_match(uop, _):
       for match in p.match(uop, {}):
         if (ret:=real_fxn(**match)) is not None: return ret  # pylint: disable=not-callable
-      return None
   return universal_match
 
 class PatternMatcher:
@@ -706,7 +704,6 @@ class PatternMatcher:
     for _,match,early_reject in self.pdict.get(uop.op, []):
       if not early_reject.issubset(ler): continue
       if (ret:=match(uop, ctx)) is not None: return ret
-    return None
 
   def fixed_point_rewrite(self, uop:UOp, ctx=None) -> UOp:
     # apply rewrite rules until a fixed point is reached. may return `uop` itself if PatternMatcher doesn't match
