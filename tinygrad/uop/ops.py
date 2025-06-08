@@ -692,6 +692,7 @@ class PatternMatcher:
       assert p.op is not None
       if compiled and (match:=upat_compile(p, fxn)) is not None: pass # pylint: disable=E0606
       else: match = upat_interpret(p, fxn)
+      # match is possible None here
       for uop in p.op: self.pdict.setdefault(uop, []).append((p, match, p.early_reject))
 
   def __reduce__(self): return PatternMatcher, ([(x,deconstruct_function(fxn) if fxn.__name__ == "<lambda>" else fxn) for x,fxn in self.patterns],)
